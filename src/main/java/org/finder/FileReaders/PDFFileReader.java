@@ -1,10 +1,12 @@
-package org.finder;
+package org.finder.FileReaders;
 
 import java.io.IOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.finder.Tree.AVLTree;
+
 import java.io.File;
 
 /**

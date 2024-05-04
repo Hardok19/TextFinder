@@ -1,4 +1,10 @@
 package org.finder;
+
+import org.finder.FileReaders.DocxFileReader;
+import org.finder.FileReaders.PDFFileReader;
+import org.finder.FileReaders.TextFileReader;
+import org.finder.Tree.AVLTree;
+
 public class Main {
     public static void main(String[] args) {
         AVLTree tree = new AVLTree(); // Crear la instancia del árbol AVL

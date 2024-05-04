@@ -1,4 +1,4 @@
-package org.finder;
+package org.finder.Tree;
 
 import java.util.ArrayList;
 import java.util.List;

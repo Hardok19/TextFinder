@@ -1,4 +1,5 @@
-package org.finder;
+package org.finder.Tree;
+
 /**
  * Clase para representar un árbol AVL que gestiona palabras y sus ocurrencias en documentos.
  * Proporciona métodos para insertar palabras y buscar en el árbol, manteniendo el equilibrio del árbol.
