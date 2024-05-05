@@ -1,4 +1,6 @@
 package org.finder.FileReaders;
+import org.finder.Tree.Occurrence;
+import org.finder.Tree.Normalizer;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -36,6 +38,7 @@ public class TextFileReader {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             int wordCount = 0;  // Contador acumulativo de palabras para mantener la posición secuencial.
+            Occurrence previous = null;
 
             // Procesar el archivo línea por línea
             while ((line = br.readLine()) != null) {
@@ -44,8 +47,16 @@ public class TextFileReader {
                 // Procesar cada palabra en la línea
                 for (String word : words) {
                     if (!word.isEmpty()) {  // Evitar procesar cadenas vacías.
-                        avlTree.insert(word, filePath, wordCount + 1); // Incrementar la posición de la palabra por 1
+                        String originalWord = word;
+                        word = Normalizer.normalizeWord(word);
+                        Occurrence occurrence = new Occurrence(filePath, originalWord, wordCount + 1);// Incrementar la posición de la palabra por 1
+                        avlTree.insert(word, occurrence);
                         wordCount++; // Aumentar el contador acumulativo de palabras
+                        if(previous != null){
+                            occurrence.previous = previous;
+                            previous.next = occurrence;
+                        }
+                        previous = occurrence;
                     }
                 }
             }

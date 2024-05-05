@@ -38,25 +38,19 @@ public class TreeNode {
         Occurrence newOccurrence = new Occurrence(documentName, originalWord, position);
         this.occurrences.add(newOccurrence);
     }
-}
-/**
- * Clase para almacenar detalles de una ocurrencia de una palabra en un documento.
- * Incluye el nombre del documento, la palabra original y la posición de la palabra en el documento.
- */
-class Occurrence {
-    String documentName;// Nombre del documento donde se encontró la palabra.
-    String originalWord;// Forma original de la palabra, con su capitalización y puntuación originales.
-    int position;// Posición de la palabra en el documento.
     /**
-     * Constructor para crear una nueva ocurrencia.
+     * Busca una ocurrencia específica dentro de las ocurrencias del nodo donde la palabra original es igual a la palabra ingresada.
+     * Esta función es útil cuando se necesita encontrar una ocurrencia exacta de una palabra en un texto, incluyendo diferencias de mayúsculas y minúsculas o puntuación.
      *
-     * @param documentName El nombre del documento donde se encontró la palabra.
-     * @param originalWord La palabra original como se encontró en el documento.
-     * @param position La posición de la palabra dentro del documento.
+     * @param originalWord La palabra original que se busca dentro de las ocurrencias del nodo.
+     * @return La ocurrencia que coincide exactamente con la palabra original, si se encuentra; de lo contrario, retorna null.
      */
-    Occurrence(String documentName, String originalWord, int position) {
-        this.documentName = documentName;
-        this.originalWord = originalWord;
-        this.position = position;
+    public Occurrence findExactOccurrence(String originalWord) {
+        for (Occurrence occurrence : this.occurrences) {
+            if (occurrence.originalWord.equals(originalWord)) {
+                return occurrence;  // Devuelve la ocurrencia que coincide exactamente con la palabra original ingresada.
+            }
+        }
+        return null;  // No se encontró una ocurrencia exacta.
     }
 }

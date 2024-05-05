@@ -1,13 +1,14 @@
 package org.finder.FileReaders;
 
+import org.finder.Tree.AVLTree;
+import org.finder.Tree.Normalizer;
+import org.finder.Tree.Occurrence;
 import java.io.IOException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.io.File;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.finder.Tree.AVLTree;
-
-import java.io.File;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Clase encargada de leer archivos PDF y extraer palabras para insertarlas en un árbol AVL.
@@ -35,11 +36,20 @@ public class PDFFileReader {
             String text = pdfStripper.getText(document);
             String[] words = text.split("\\s+");
             int wordCount = 0;  // Contador acumulativo de palabras para mantener la posición secuencial.
+            Occurrence previous = null;
 
             for (String word : words) {
                 if (!word.isEmpty()) {
-                    avlTree.insert(word, filePath, wordCount + 1);
+                    String originalWord = word;
+                    word = Normalizer.normalizeWord(word);
+                    Occurrence occurrence = new Occurrence(filePath, originalWord, wordCount + 1);
+                    avlTree.insert(word, occurrence);
                     wordCount++;
+                    if (previous != null) {
+                        occurrence.previous = previous;
+                        previous.next = occurrence;
+                    }
+                    previous = occurrence;
                 }
             }
         } catch (IOException e) {
@@ -47,3 +57,4 @@ public class PDFFileReader {
         }
     }
 }
+

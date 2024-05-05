@@ -5,6 +5,8 @@ import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.finder.Tree.AVLTree;
+import org.finder.Tree.Normalizer;
+import org.finder.Tree.Occurrence;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -18,7 +20,8 @@ import java.util.List;
  */
 public class DocxFileReader {
     private static final Logger logger = LogManager.getLogger(DocxFileReader.class);
-    private AVLTree avlTree;// Árbol AVL donde se insertarán las palabras.
+    private AVLTree avlTree; // Árbol AVL donde se insertarán las palabras.
+
     /**
      * Constructor que inicializa el DocxFileReader con un árbol AVL específico.
      *
@@ -38,14 +41,23 @@ public class DocxFileReader {
         try (FileInputStream fis = new FileInputStream(filePath);
              XWPFDocument document = new XWPFDocument(fis)) {
             List<XWPFParagraph> paragraphs = document.getParagraphs();
-            int wordCount = 0;
+            int wordCount = 0; // Contador acumulativo de palabras para mantener la posición secuencial.
+            Occurrence previous = null;
 
             for (XWPFParagraph paragraph : paragraphs) {
                 String[] words = paragraph.getText().split("\\s+");
                 for (String word : words) {
                     if (!word.isEmpty()) {
-                        avlTree.insert(word.trim(), filePath, wordCount + 1);
+                        String originalWord = word;
+                        word = Normalizer.normalizeWord(word);
+                        Occurrence occurrence = new Occurrence(filePath, originalWord, wordCount + 1);
+                        avlTree.insert(word, occurrence);
                         wordCount++;
+                        if (previous != null) {
+                            occurrence.previous = previous;
+                            previous.next = occurrence;
+                        }
+                        previous = occurrence;
                     }
                 }
             }
