@@ -17,6 +17,8 @@ import java.util.List;
  * Esta clase utiliza la biblioteca Apache POI para procesar archivos DOCX.
  * Extrae todas las palabras de cada párrafo del documento y las inserta en el árbol AVL,
  * manteniendo un conteo de su posición para facilitar búsquedas y referencias futuras.
+ * Adicionalmente, mantiene un registro de la línea y posición en la línea para cada palabra,
+ * lo que facilita referencias más precisas dentro del documento.
  */
 public class DocxFileReader {
     private static final Logger logger = LogManager.getLogger(DocxFileReader.class);
@@ -41,16 +43,21 @@ public class DocxFileReader {
         try (FileInputStream fis = new FileInputStream(filePath);
              XWPFDocument document = new XWPFDocument(fis)) {
             List<XWPFParagraph> paragraphs = document.getParagraphs();
+            int lineCount = 0; // Contador de líneas.
             int wordCount = 0; // Contador acumulativo de palabras para mantener la posición secuencial.
             Occurrence previous = null;
 
             for (XWPFParagraph paragraph : paragraphs) {
+                lineCount++;
                 String[] words = paragraph.getText().split("\\s+");
+                int lineWordCount = 0; // Contador de palabras en la línea actual.
+
                 for (String word : words) {
                     if (!word.isEmpty()) {
+                        lineWordCount++;
                         String originalWord = word;
                         word = Normalizer.normalizeWord(word);
-                        Occurrence occurrence = new Occurrence(filePath, originalWord, wordCount + 1);
+                        Occurrence occurrence = new Occurrence(filePath, originalWord, wordCount + 1, lineCount, lineWordCount);
                         avlTree.insert(word, occurrence);
                         wordCount++;
                         if (previous != null) {

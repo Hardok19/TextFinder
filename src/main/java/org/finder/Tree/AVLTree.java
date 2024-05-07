@@ -227,7 +227,11 @@ public class AVLTree {
         int wordsLength = words.length;
         for (Occurrence occurrence : occurrences) {
             String contextualSentence = SentenceAroundWord(occurrence, wordsLength);
-            results.add(occurrence.documentName + ": " + "Pocicion:" + occurrence.position + ": " + contextualSentence);
+            results.add(occurrence.documentName +
+                    ": " + "Pocición general:" + occurrence.position +
+                    ": " + "Linea:" + occurrence.lineposition.get(0) +
+                    ": " + "Pocición en linea:" + occurrence.lineposition.get(1) +
+                    ": " + contextualSentence);
         }
         return results;
     }

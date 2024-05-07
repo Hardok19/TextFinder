@@ -27,18 +27,6 @@ public class TreeNode {
         this.right = null;
     }
     /**
-     * Añade una nueva ocurrencia de la palabra a este nodo.
-     * La ocurrencia contiene información sobre el documento, la palabra original y su posición en el documento.
-     *
-     * @param documentName El nombre del documento donde se encontró la palabra.
-     * @param originalWord La palabra original, como apareció en el documento.
-     * @param position La posición de la palabra en el documento.
-     */
-    public void addOccurrence(String documentName, String originalWord, int position) {
-        Occurrence newOccurrence = new Occurrence(documentName, originalWord, position);
-        this.occurrences.add(newOccurrence);
-    }
-    /**
      * Busca una ocurrencia específica dentro de las ocurrencias del nodo donde la palabra original es igual a la palabra ingresada.
      * Esta función es útil cuando se necesita encontrar una ocurrencia exacta de una palabra en un texto, incluyendo diferencias de mayúsculas y minúsculas o puntuación.
      *

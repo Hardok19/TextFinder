@@ -9,14 +9,19 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         AVLTree tree = new AVLTree(); // Crear la instancia del árbol AVL
-        TextFileReader reader = new TextFileReader(tree); // Crear la instancia del lector de archivos de texto
 
-        String filePath = "src/main/resources/example2.txt";
+        TextFileReader readertxt = new TextFileReader(tree);
+        PDFFileReader readerpdf = new PDFFileReader(tree);
+        DocxFileReader readerdocx = new DocxFileReader(tree);
 
-        // Leer los archivos y cargar las palabras en el árbol AVL
-        reader.readFileAndInsertWords(filePath);
+        String filePath1 = "src/main/resources/example.txt";
+        String filePath2 = "src/main/resources/example.pdf";
+        String filePath3 = "src/main/resources/example.docx";
+
+        readertxt.readFileAndInsertWords(filePath1);
+
         // Frases y palabras para buscar
-        String[] searches = {"example", "quick brown fox  "};
+        String[] searches = {"EXAMPLE", "fox   ", "multiple "};
 
         // Bucle para realizar búsquedas y mostrar resultados
         for (String search : searches) {
