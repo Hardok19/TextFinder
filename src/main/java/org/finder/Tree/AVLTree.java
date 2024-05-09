@@ -1,4 +1,6 @@
-package org.finder;
+package org.finder.Tree;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * Clase para representar un árbol AVL que gestiona palabras y sus ocurrencias en documentos.
  * Proporciona métodos para insertar palabras y buscar en el árbol, manteniendo el equilibrio del árbol.
@@ -34,27 +36,11 @@ public class AVLTree {
         return height(node.left) - height(node.right);
     }
     /**
-     * Normaliza una palabra eliminando toda puntuación y convirtiéndola a minúsculas.
-     * Esta función es esencial para asegurar que las comparaciones de palabras en el árbol AVL se hagan
-     * de manera uniforme, independientemente de las diferencias de formato o puntuación en el texto original.
-     *
-     * @param word La palabra que se va a normalizar.
-     * @return La palabra normalizada: sin puntuación y en minúsculas.
-     */
-    public static String normalizeWord(String word) { // Eliminar puntuación y Convertir a minúsculas
-        return word.toLowerCase().replaceAll("\\p{Punct}", "");
-    }
-    /**
      * Inserta una palabra en el árbol. Si la palabra ya existe, añade una nueva ocurrencia.
      *
      * @param word La palabra a insertar en el árbol.
-     * @param doc El nombre del documento donde se encontró la palabra.
-     * @param position La posición de la palabra en el documento.
      */
-    public void insert(String word, String doc, int position) {
-        String originalWord = word;
-        word = normalizeWord(word);
-        Occurrence occurrence = new Occurrence(doc, originalWord, position);
+    public void insert(String word, Occurrence occurrence) {
         root = insertRecursive(root, word, occurrence);
     }
     /**
@@ -147,22 +133,22 @@ public class AVLTree {
     /**
      * Método recursivo para buscar un nodo por su palabra normalizada en el árbol AVL.
      * Navega por el árbol de forma recursiva hasta encontrar el nodo que contiene la palabra especificada o hasta que se alcanza una hoja del árbol.
-     * Este método es crucial para operaciones de búsqueda y es utilizado internamente por el método público {@link #search}.
+     * Este método es crucial para operaciones de búsqueda y es utilizado internamente por el método público {@link #searchTreeNode}.
      *
      * @param root El nodo actual en el árbol que se está inspeccionando. Este parámetro cambia a medida que el método se llama recursivamente.
      * @param word La palabra normalizada que se busca en el árbol.
      * @return El nodo que contiene la palabra si se encuentra, o null si no se encuentra la palabra en el árbol.
      */
-    private TreeNode searchRecursive(TreeNode root, String word) {
+    private TreeNode searchTreeNodeRecursive(TreeNode root, String word) {
         if (root == null) {
             return null;  // El árbol está vacío o hemos llegado a una hoja sin encontrar el nodo.
         }
         if (root.word.compareTo(word) == 0) {
             return root;  // La palabra buscada coincide con el nodo actual.
         } else if (root.word.compareTo(word) > 0) {
-            return searchRecursive(root.left, word);  // Buscar en el subárbol izquierdo.
+            return searchTreeNodeRecursive(root.left, word);  // Buscar en el subárbol izquierdo.
         } else {
-            return searchRecursive(root.right, word);  // Buscar en el subárbol derecho.
+            return searchTreeNodeRecursive(root.right, word);  // Buscar en el subárbol derecho.
         }
     }
     /**
@@ -171,34 +157,134 @@ public class AVLTree {
      * incluyendo la conversión a minúsculas, eliminación de puntuación y eliminación de espacios en blanco alrededor de la palabra.
      * Esto permite la búsqueda de una palabra en el árbol sin exponer la estructura interna del mismo y garantiza que las comparaciones
      * se hagan de manera uniforme.
-     * Utiliza el método {@link #searchRecursive} para realizar la búsqueda de forma eficiente.
+     * Utiliza el método {@link #searchTreeNodeRecursive} para realizar la búsqueda de forma eficiente.
      *
      * @param word La palabra que se desea buscar en el árbol. La palabra será normalizada antes de la búsqueda, incluyendo el recorte de espacios.
      * @return El nodo que contiene la palabra normalizada, si se encuentra; de lo contrario, retorna null.
      */
-    public TreeNode search(String word) {
-        String normalizedWord = normalizeWord(word.trim());  // Normalizar la palabra recortando espacios y normalizando antes de la búsqueda
-        return searchRecursive(root, normalizedWord);
+    public TreeNode searchTreeNode(String word) {
+        if (root == null) {
+            return null;
+        }
+        word = word.trim();// Normalizar la palabra recortando espacios
+        String normalizedWord = Normalizer.normalizeWord(word);
+        TreeNode node = searchTreeNodeRecursive(root, normalizedWord);
+        if (node == null){
+            return null;
+        } else {
+            return node;
+        }
     }
     /**
-     * Busca una palabra en el árbol AVL y imprime detalles sobre el nodo encontrado.
-     * Este método es una interfaz de usuario para mostrar la información asociada con una palabra específica,
-     * incluyendo su forma normalizada y todas las ocurrencias de la palabra en los documentos.
-     * Si la palabra no se encuentra en el árbol, se imprime un mensaje indicándolo.
+     * Busca todas las ocurrencias de una palabra o frase en el árbol AVL, utilizando una búsqueda normalizada.
+     * Devuelve una lista de todas las ocurrencias que coinciden con la palabra o frase normalizada proporcionada.
      *
-     * @param word La palabra que se busca en el árbol. La palabra debe estar normalizada antes de la búsqueda.
+     * @param input La palabra o frase que se desea buscar en el árbol.
+     * @return Una lista de todas las ocurrencias que coinciden con la entrada normalizada, o una lista vacía si no se encuentra ninguna.
      */
-    public void searchAndPrintDetails(String word) {
-        TreeNode node = search(word);
-        if (node != null) {
-            // Imprimir detalles del nodo encontrado
-            System.out.println("1. Palabra normalizada: " + node.word);
-            System.out.println("2. Lista de ocurrencias:");
-            for (Occurrence occurrence : node.occurrences) {
-                System.out.println(occurrence.documentName + " / " + occurrence.originalWord + " / " + occurrence.position);
+    public List<Occurrence> searchAllOccurrences(String input) {
+        String normalizedInput = Normalizer.normalizeWord(input);  // Normaliza la entrada
+        List<Occurrence> occurrences = new ArrayList<>();
+
+        String[] words = normalizedInput.trim().split("\\s+");
+        if (words.length == 1) {
+            TreeNode node = searchTreeNode(words[0]);  // Busca el nodo usando la palabra normalizada
+            if (node != null) {
+                return new ArrayList<>(node.occurrences);  // Devuelve todas las ocurrencias de la palabra normalizada
             }
         } else {
-            System.out.println("Palabra no encontrada en el árbol.");
+            TreeNode node = searchTreeNode(words[0]);
+            if (node != null) {
+                for (Occurrence occurrence : node.occurrences) {
+                    boolean matches = true;
+                    Occurrence current = occurrence;
+                    for (int i = 1; i < words.length; i++) {
+                        current = current.next;
+                        if (current == null || !Normalizer.normalizeWord(current.originalWord).equals(words[i])) {
+                            matches = false;
+                            break;
+                        }
+                    }
+                    if (matches) {
+                        occurrences.add(occurrence);  // Añade la ocurrencia de la primera palabra de la frase si toda la frase coincide
+                    }
+                }
+            }
         }
+        return occurrences;  // Devuelve la lista de ocurrencias encontradas o vacía si no se encuentra ninguna
+    }
+    /**
+     * Busca una palabra o frase en el árbol AVL y devuelve todas las coincidencias encontradas.
+     * Devuelve el nombre del documento y la oración contextualizada con la palabra o frase rodeada por tres numerales (###).
+     *
+     * @param input La palabra o frase que se desea buscar.
+     * @return Una lista de cadenas con el nombre del documento y la oración contextualizada para cada coincidencia.
+     */
+    public List<String> searchString(String input) {
+        List<Occurrence> occurrences = searchAllOccurrences(input);
+        List<String> results = new ArrayList<>();
+        String[] words = input.trim().split("\\s+");
+        int wordsLength = words.length;
+        for (Occurrence occurrence : occurrences) {
+            String contextualSentence = SentenceAroundWord(occurrence, wordsLength);
+            results.add(occurrence.documentName +
+                    ": " + "Pocición general:" + occurrence.position +
+                    ": " + "Linea:" + occurrence.lineposition.get(0) +
+                    ": " + "Pocición en linea:" + occurrence.lineposition.get(1) +
+                    ": " + contextualSentence);
+        }
+        return results;
+    }
+    /**
+     * Construye y devuelve la oración completa alrededor de una ocurrencia de palabra o frase dada,
+     * limitando la búsqueda a 20 palabras antes y 20 palabras después. La palabra o frase central
+     * está destacada por tres numerales (###) a cada lado, lo que facilita su identificación en el texto.
+     *
+     * @param occurrence La ocurrencia inicial desde donde se debe comenzar a construir la oración.
+     * @param length La longitud de la frase a destacar, empezando desde la ocurrencia dada.
+     * @return La oración formateada con la palabra o frase destacada y limitada por palabras cercanas
+     *         hasta encontrar un punto o alcanzar el límite de 20 palabras adicionales antes y después.
+     */
+    private String SentenceAroundWord(Occurrence occurrence, int length) {
+        StringBuilder sentence = new StringBuilder();
+        Occurrence current = occurrence;
+        // Recolectar hasta 20 palabras antes o hasta encontrar un punto.
+        int count = 0;
+        boolean foundPoint = false;  // Bandera para detectar la presencia de un punto.
+        while (current.previous != null && count < 20) {
+            if (current.previous.originalWord.contains(".")) {
+                foundPoint = true;  // Se detectó un punto, indicando un posible inicio de oración.
+            }
+            if (foundPoint) {
+                break;  // Detener la recolección de palabras previas una vez que se encuentra un punto.
+            }
+            // Insertar la palabra anterior al principio del constructor de cadenas.
+            sentence.insert(0, " " + current.previous.originalWord);
+            current = current.previous;
+            count++;
+        }
+        // Agregar los numerales y la palabra o frase destacada.
+        sentence.append("###");
+        if (length == 1){
+            sentence.append(" ").append(occurrence.originalWord);
+        }else {
+            for (int i = 0; i < length && occurrence != null; i++) {
+                sentence.append(" ").append(occurrence.originalWord);
+                occurrence = occurrence.next;
+            }
+        }
+        sentence.append(" ###");
+        // Recolectar hasta 20 palabras después o hasta encontrar un punto.
+        current = occurrence;  // Continuar desde la última ocurrencia modificada.
+        count = 0;
+        while (current != null && current.next != null && count < 20) {
+            sentence.append(" ").append(current.next.originalWord);
+            if (current.next.originalWord.contains(".")) {
+                break;  // Detener la recolección si se encuentra un punto.
+            }
+            current = current.next;
+            count++;
+        }
+        return sentence.toString().trim();  // Retornar la oración limpiando espacios adicionales.
     }
 }

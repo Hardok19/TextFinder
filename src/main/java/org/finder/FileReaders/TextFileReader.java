@@ -1,9 +1,13 @@
-package org.finder;
+package org.finder.FileReaders;
+import org.finder.Tree.Occurrence;
+import org.finder.Tree.Normalizer;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.finder.Tree.AVLTree;
+
 /**
  * Clase encargada de leer archivos de texto y extraer palabras para insertarlas en un árbol AVL.
  * Esta clase ofrece la funcionalidad de procesar archivos de texto, extrayendo cada palabra y
@@ -33,17 +37,30 @@ public class TextFileReader {
     public void readFileAndInsertWords(String filePath) {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
-            int wordCount = 0;  // Contador acumulativo de palabras para mantener la posición secuencial.
+            int wordCount = 0; // Contador acumulativo de palabras para mantener la posición secuencial.
+            int lineCount = 0; // Contador de líneas.
+            Occurrence previous = null;
 
             // Procesar el archivo línea por línea
             while ((line = br.readLine()) != null) {
-                String[] words = line.split("\\s+"); // Divide cada línea en palabras usando espacios.
+                lineCount++;
+                String[] words = line.split("\\s+");
+                int lineWordCount = 0; // Contador de palabras en la línea actual.
 
                 // Procesar cada palabra en la línea
                 for (String word : words) {
                     if (!word.isEmpty()) {  // Evitar procesar cadenas vacías.
-                        avlTree.insert(word, filePath, wordCount + 1); // Incrementar la posición de la palabra por 1
+                        lineWordCount++;
+                        String originalWord = word;
+                        word = Normalizer.normalizeWord(word);
+                        Occurrence occurrence = new Occurrence(filePath, originalWord, wordCount + 1, lineCount, lineWordCount);
+                        avlTree.insert(word, occurrence);
                         wordCount++; // Aumentar el contador acumulativo de palabras
+                        if (previous != null) {
+                            occurrence.previous = previous;
+                            previous.next = occurrence;
+                        }
+                        previous = occurrence;
                     }
                 }
             }
