@@ -61,8 +61,8 @@ public class DocxFileReader {
                         avlTree.insert(word, occurrence);
                         wordCount++;
                         if (previous != null) {
-                            occurrence.previous = previous;
-                            previous.next = occurrence;
+                            occurrence.setPrevious(previous);
+                            previous.setNext(occurrence);
                         }
                         previous = occurrence;
                     }
