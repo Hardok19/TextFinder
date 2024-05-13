@@ -5,6 +5,7 @@ import org.finder.FileReaders.PDFFileReader;
 import org.finder.FileReaders.TextFileReader;
 import org.finder.Tree.AVLTree;
 import java.util.List;
+import org.finder.Ordering.FileInfo;
 
 public class Main {
     public static void main(String[] args) {
@@ -17,6 +18,11 @@ public class Main {
         String filePath1 = "src/main/resources/example.txt";
         String filePath2 = "src/main/resources/example.pdf";
         String filePath3 = "src/main/resources/example.docx";
+
+        FileInfo fileInfo = new FileInfo();
+        fileInfo.printFileInfo(filePath1);
+        fileInfo.printFileInfo(filePath2);
+        fileInfo.printFileInfo(filePath3);
 
         readertxt.readFileAndInsertWords(filePath1);
 
