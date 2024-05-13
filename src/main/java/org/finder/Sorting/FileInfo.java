@@ -5,6 +5,7 @@ import java.nio.file.attribute.*;
 import java.io.IOException;
 
 public class FileInfo {
+
     /**
      * Imprime el tamaño y la fecha de creación del archivo especificado.
      *
