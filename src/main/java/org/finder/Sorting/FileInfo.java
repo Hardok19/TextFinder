@@ -1,4 +1,4 @@
-package org.finder.Ordering;
+package org.finder.Sorting;
 
 import java.nio.file.*;
 import java.nio.file.attribute.*;

@@ -5,7 +5,7 @@ import org.finder.FileReaders.PDFFileReader;
 import org.finder.FileReaders.TextFileReader;
 import org.finder.Tree.AVLTree;
 import java.util.List;
-import org.finder.Ordering.FileInfo;
+import org.finder.Sorting.FileInfo;
 
 public class Main {
     public static void main(String[] args) {
