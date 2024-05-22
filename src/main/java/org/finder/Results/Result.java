@@ -43,6 +43,14 @@ public class Result {
      * @return La hora de modificación del archivo, utilizando la clase FileTime.
      */
     public FileTime getFileTime(){return fileTime;}
+    /**
+     * Devuelve la ruta del archivo
+     *
+     * @return la ruta absoluta del archivo en string.
+     */
+    public String getFilePath(){return filePath;}
+
+
 
 
 

@@ -1,5 +1,7 @@
 package org.finder.Sorting;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.finder.Results.*;
 import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
@@ -7,6 +9,7 @@ import java.util.List;
 
 
 public class Sorting {
+    private static final Logger logger = LogManager.getLogger(Sorting.class);
 
     /**
      * Ordena una lista de objetos Result en orden ascendente usando el algoritmo de Bubble Sort.
@@ -238,32 +241,32 @@ public class Sorting {
         }
 
         // Ordenar por fileName de manera ascendente y mostrar resultados
-        System.out.println("Orden Ascendente por fileName:");
+        logger.info("Orden Ascendente por fileName:");
         Sorting.quickSortByFileNameAscending(results);
         results.forEach(result -> System.out.println(result.getFileName()));
 
         // Ordenar por fileName de manera descendente y mostrar resultados
-        System.out.println("\nOrden Descendente por fileName:");
+        logger.info("\nOrden Descendente por fileName:");
         Sorting.quickSortByFileNameDescending(results);
         results.forEach(result -> System.out.println(result.getFileName()));
 
         // Ordenar por fileTime de manera ascendente y mostrar resultados
-        System.out.println("\nOrden Ascendente por fileTime:");
+        logger.info("\nOrden Ascendente por fileTime:");
         Sorting.bubbleSortAscending(results);
         results.forEach(result -> System.out.println(result.getFileName() + " - " + result.getFileTime()));
 
         // Ordenar por fileTime de manera descendente y mostrar resultados
-        System.out.println("\nOrden Descendente por fileTime:");
+        logger.info("\nOrden Descendente por fileTime:");
         Sorting.bubbleSortDescending(results);
         results.forEach(result -> System.out.println(result.getFileName() + " - " + result.getFileTime()));
 
         // Ordenar por fileSize de manera ascendente y mostrar resultados
-        System.out.println("\nOrden Ascendente por fileSize:");
+        logger.info("\nOrden Ascendente por fileSize:");
         Sorting.radixSortByFileSizeAscending(results);
         results.forEach(result -> System.out.println(result.getFileName() + " - " + result.getFileSize()));
 
         // Ordenar por fileSize de manera descendente y mostrar resultados
-        System.out.println("\nOrden Descendente por fileSize:");
+        logger.info("\nOrden Descendente por fileSize:");
         Sorting.radixSortByFileSizeDescending(results);
         results.forEach(result -> System.out.println(result.getFileName() + " - " + result.getFileSize()));
     }

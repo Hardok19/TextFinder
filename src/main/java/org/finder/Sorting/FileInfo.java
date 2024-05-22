@@ -1,10 +1,15 @@
 package org.finder.Sorting;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.finder.FileReaders.PDFFileReader;
+
 import java.nio.file.*;
 import java.nio.file.attribute.*;
 import java.io.IOException;
 
 public class FileInfo {
+    private static final Logger logger = LogManager.getLogger(FileInfo.class);
 
     /**
      * Imprime el tamaño y la fecha de creación del archivo especificado.
@@ -21,10 +26,10 @@ public class FileInfo {
             // Obtener la fecha de creación del archivo
             BasicFileAttributes attrs = Files.readAttributes(path, BasicFileAttributes.class);
             FileTime fileTime = attrs.creationTime();
-            System.out.println("Fecha de creación del archivo: " + fileTime);
+            logger.info("Fecha de creación del archivo: " + fileTime);
 
         } catch (IOException e) {
-            System.err.println("Error al acceder al archivo: " + e.getMessage());
+            logger.error("Error al acceder al archivo: " + e.getMessage());
         }
     }
 }

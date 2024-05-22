@@ -287,4 +287,30 @@ public class AVLTree {
         }
         return sentence.toString().trim();  // Retornar la oración limpiando espacios adicionales.
     }
+
+
+    /**
+     * Elimina todos los nodos del árbol, limpiándolo.
+     */
+    public void clear() {
+        root = clearRecursive(root);
+    }
+
+    /**
+     * Método recursivo para eliminar todos los nodos del árbol.
+     *
+     * @param root El nodo actual que se está evaluando.
+     * @return El nodo actual después de eliminar sus descendientes.
+     */
+    private TreeNode clearRecursive(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        root.setLeft(clearRecursive(root.getLeft()));
+        root.setRight(clearRecursive(root.getRight()));
+        return null;
+    }
+
+
+
 }
