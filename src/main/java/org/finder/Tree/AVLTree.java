@@ -18,7 +18,7 @@ public class AVLTree {
     private int height(TreeNode node) {
         if (node == null)
             return 0;
-        return node.height;
+        return node.getHeight();
     }
     /**
      * Calcula y devuelve el factor de balance de un nodo específico en el árbol AVL.
@@ -33,7 +33,7 @@ public class AVLTree {
     private int getBalance(TreeNode node) {
         if (node == null)
             return 0;
-        return height(node.left) - height(node.right);
+        return height(node.getLeft()) - height(node.getRight());
     }
     /**
      * Inserta una palabra en el árbol. Si la palabra ya existe, añade una nueva ocurrencia.
@@ -51,14 +51,14 @@ public class AVLTree {
      * @return El nuevo nodo raíz después de la rotación.
      */
     private TreeNode rightRotate(TreeNode y) {
-        TreeNode x = y.left;
-        TreeNode T2 = x.right;
+        TreeNode x = y.getLeft();
+        TreeNode T2 = x.getRight();
         // Realizar rotación
-        x.right = y;
-        y.left = T2;
+        x.setRight(y);
+        y.setLeft(T2);
         // Actualizar alturas
-        y.height = Math.max(height(y.left), height(y.right)) + 1;
-        x.height = Math.max(height(x.left), height(x.right)) + 1;
+        y.setHeight(Math.max(height(y.getLeft()), height(y.getRight())) + 1);
+        x.setHeight(Math.max(height(x.getLeft()), height(x.getRight())) + 1);
         return x;
     }
     /**
@@ -70,14 +70,14 @@ public class AVLTree {
      * @return El nuevo nodo raíz después de la rotación.
      */
     private TreeNode leftRotate(TreeNode x) {
-        TreeNode y = x.right;
-        TreeNode T2 = y.left;
+        TreeNode y = x.getRight();
+        TreeNode T2 = y.getLeft();
         // Realizar rotación
-        y.left = x;
-        x.right = T2;
+        y.setLeft(x);
+        x.setRight(T2);
         // Actualizar alturas
-        x.height = Math.max(height(x.left), height(x.right)) + 1;
-        y.height = Math.max(height(y.left), height(y.right)) + 1;
+        x.setHeight(Math.max(height(x.getLeft()), height(x.getRight())) + 1);
+        y.setHeight(Math.max(height(y.getLeft()), height(y.getRight())) + 1);
         return y;
     }
     /**
@@ -93,39 +93,39 @@ public class AVLTree {
     private TreeNode insertRecursive(TreeNode root, String word, Occurrence occurrence) {
         if (root == null) {
             TreeNode newNode = new TreeNode(word);
-            newNode.occurrences.add(occurrence); // Añadir la ocurrencia al crear el nodo nuevo
+            newNode.addOccurrence(occurrence); // Añadir la ocurrencia al crear el nodo nuevo
             return newNode;
         }
-        int result = root.word.compareTo(word);
+        int result = root.getWord().compareTo(word);
         if (result > 0) {
-            root.left = insertRecursive(root.left, word, occurrence);
+            root.setLeft(insertRecursive(root.getLeft(), word, occurrence));
         } else if (result < 0) {
-            root.right = insertRecursive(root.right, word, occurrence);
+            root.setRight(insertRecursive(root.getRight(), word, occurrence));
         } else {
             // No se permiten claves duplicadas
-            root.occurrences.add(occurrence); // Añadir la ocurrencia si la palabra ya existe
+            root.addOccurrence(occurrence); // Añadir la ocurrencia si la palabra ya existe
             return root;
         }
         // Actualizar altura de este nodo ancestro
-        root.height = 1 + Math.max(height(root.left), height(root.right));
+        root.setHeight(1 + Math.max(height(root.getLeft()), height(root.getRight())));
         // Obtener el factor de balance de este nodo ancestro para verificar si se desbalanceó
         int balance = getBalance(root);
         // Caso Izquierda-Izquierda
-        if (balance > 1 && word.compareTo(root.left.word) < 0) {
+        if (balance > 1 && word.compareTo(root.getLeft().getWord()) < 0) {
             return rightRotate(root);
         }
         // Caso Derecha-Derecha
-        if (balance < -1 && word.compareTo(root.right.word) > 0) {
+        if (balance < -1 && word.compareTo(root.getRight().getWord()) > 0) {
             return leftRotate(root);
         }
         // Caso Izquierda-Derecha
-        if (balance > 1 && word.compareTo(root.left.word) > 0) {
-            root.left = leftRotate(root.left);
+        if (balance > 1 && word.compareTo(root.getLeft().getWord()) > 0) {
+            root.setLeft(leftRotate(root.getLeft()));
             return rightRotate(root);
         }
         // Caso Derecha-Izquierda
-        if (balance < -1 && word.compareTo(root.right.word) < 0) {
-            root.right = rightRotate(root.right);
+        if (balance < -1 && word.compareTo(root.getRight().getWord()) < 0) {
+            root.setRight(rightRotate(root.getRight()));
             return leftRotate(root);
         }
         return root;
@@ -143,12 +143,12 @@ public class AVLTree {
         if (root == null) {
             return null;  // El árbol está vacío o hemos llegado a una hoja sin encontrar el nodo.
         }
-        if (root.word.compareTo(word) == 0) {
+        if (root.getWord().compareTo(word) == 0) {
             return root;  // La palabra buscada coincide con el nodo actual.
-        } else if (root.word.compareTo(word) > 0) {
-            return searchTreeNodeRecursive(root.left, word);  // Buscar en el subárbol izquierdo.
+        } else if (root.getWord().compareTo(word) > 0) {
+            return searchTreeNodeRecursive(root.getLeft(), word);  // Buscar en el subárbol izquierdo.
         } else {
-            return searchTreeNodeRecursive(root.right, word);  // Buscar en el subárbol derecho.
+            return searchTreeNodeRecursive(root.getRight(), word);  // Buscar en el subárbol derecho.
         }
     }
     /**
@@ -190,17 +190,17 @@ public class AVLTree {
         if (words.length == 1) {
             TreeNode node = searchTreeNode(words[0]);  // Busca el nodo usando la palabra normalizada
             if (node != null) {
-                return new ArrayList<>(node.occurrences);  // Devuelve todas las ocurrencias de la palabra normalizada
+                return new ArrayList<>(node.getOccurrences());  // Devuelve todas las ocurrencias de la palabra normalizada
             }
         } else {
             TreeNode node = searchTreeNode(words[0]);
             if (node != null) {
-                for (Occurrence occurrence : node.occurrences) {
+                for (Occurrence occurrence : node.getOccurrences()) {
                     boolean matches = true;
                     Occurrence current = occurrence;
                     for (int i = 1; i < words.length; i++) {
-                        current = current.next;
-                        if (current == null || !Normalizer.normalizeWord(current.originalWord).equals(words[i])) {
+                        current = current.getNext();
+                        if (current == null || !Normalizer.normalizeWord(current.getOriginalWord()).equals(words[i])) {
                             matches = false;
                             break;
                         }
@@ -227,10 +227,10 @@ public class AVLTree {
         int wordsLength = words.length;
         for (Occurrence occurrence : occurrences) {
             String contextualSentence = SentenceAroundWord(occurrence, wordsLength);
-            results.add(occurrence.documentName +
-                    ": " + "Pocición general:" + occurrence.position +
-                    ": " + "Linea:" + occurrence.lineposition.get(0) +
-                    ": " + "Pocición en linea:" + occurrence.lineposition.get(1) +
+            results.add(occurrence.getDocumentName() +
+                    ": " + "Pocición general:" + occurrence.getPosition() +
+                    ": " + "Linea:" + occurrence.getLineposition().get(0) +
+                    ": " + "Pocición en linea:" + occurrence.getLineposition().get(1) +
                     ": " + contextualSentence);
         }
         return results;
@@ -251,40 +251,66 @@ public class AVLTree {
         // Recolectar hasta 20 palabras antes o hasta encontrar un punto.
         int count = 0;
         boolean foundPoint = false;  // Bandera para detectar la presencia de un punto.
-        while (current.previous != null && count < 20) {
-            if (current.previous.originalWord.contains(".")) {
+        while (current.getPrevious() != null && count < 20) {
+            if (current.getPrevious().getOriginalWord().contains(".")) {
                 foundPoint = true;  // Se detectó un punto, indicando un posible inicio de oración.
             }
             if (foundPoint) {
                 break;  // Detener la recolección de palabras previas una vez que se encuentra un punto.
             }
             // Insertar la palabra anterior al principio del constructor de cadenas.
-            sentence.insert(0, " " + current.previous.originalWord);
-            current = current.previous;
+            sentence.insert(0, " " + current.getPrevious().getOriginalWord());
+            current = current.getPrevious();
             count++;
         }
         // Agregar los numerales y la palabra o frase destacada.
         sentence.append("###");
         if (length == 1){
-            sentence.append(" ").append(occurrence.originalWord);
+            sentence.append(" ").append(occurrence.getOriginalWord());
         }else {
             for (int i = 0; i < length && occurrence != null; i++) {
-                sentence.append(" ").append(occurrence.originalWord);
-                occurrence = occurrence.next;
+                sentence.append(" ").append(occurrence.getOriginalWord());
+                occurrence = occurrence.getNext();
             }
         }
         sentence.append(" ###");
         // Recolectar hasta 20 palabras después o hasta encontrar un punto.
         current = occurrence;  // Continuar desde la última ocurrencia modificada.
         count = 0;
-        while (current != null && current.next != null && count < 20) {
-            sentence.append(" ").append(current.next.originalWord);
-            if (current.next.originalWord.contains(".")) {
+        while (current != null && current.getNext() != null && count < 20) {
+            sentence.append(" ").append(current.getNext().getOriginalWord());
+            if (current.getNext().getOriginalWord().contains(".")) {
                 break;  // Detener la recolección si se encuentra un punto.
             }
-            current = current.next;
+            current = current.getNext();
             count++;
         }
         return sentence.toString().trim();  // Retornar la oración limpiando espacios adicionales.
     }
+
+
+    /**
+     * Elimina todos los nodos del árbol, limpiándolo.
+     */
+    public void clear() {
+        root = clearRecursive(root);
+    }
+
+    /**
+     * Método recursivo para eliminar todos los nodos del árbol.
+     *
+     * @param root El nodo actual que se está evaluando.
+     * @return El nodo actual después de eliminar sus descendientes.
+     */
+    private TreeNode clearRecursive(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        root.setLeft(clearRecursive(root.getLeft()));
+        root.setRight(clearRecursive(root.getRight()));
+        return null;
+    }
+
+
+
 }

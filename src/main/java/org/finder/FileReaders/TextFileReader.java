@@ -57,8 +57,8 @@ public class TextFileReader {
                         avlTree.insert(word, occurrence);
                         wordCount++; // Aumentar el contador acumulativo de palabras
                         if (previous != null) {
-                            occurrence.previous = previous;
-                            previous.next = occurrence;
+                            occurrence.setPrevious(previous);
+                            previous.setNext(occurrence);
                         }
                         previous = occurrence;
                     }
