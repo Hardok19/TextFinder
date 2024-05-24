@@ -7,7 +7,10 @@ import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.finder.FileReaders.PDFFileReader;
 import org.finder.FileReaders.TextFileReader;
 import org.finder.FileReaders.DocxFileReader;
+import org.finder.Sorting.Sorting;
 import org.finder.Tree.AVLTree;
+import org.finder.biblioteca.*;
+import org.finder.Results.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -27,6 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * Clase principal para la aplicación de biblioteca con interfaz gráfica.
  * Permite agregar, eliminar y buscar archivos en la biblioteca.
@@ -34,10 +38,14 @@ import java.util.List;
 public class Gui extends JFrame {
     private final JTextArea fileDisplayArea; // Área de texto para mostrar los archivos en la biblioteca
     private final JTextField searchTextField; // Campo de texto para ingresar la palabra o frase a buscar
-    private final JPanel resultsPanel; // Panel para mostrar los resultados de la búsqueda
+    private JPanel resultsPanel; // Panel para mostrar los resultados de la búsqueda
     private final JComboBox<String> sortComboBox; // ComboBox para seleccionar el criterio de ordenamiento
 
     private final AVLTree tree; // Árbol AVL para almacenar y buscar palabras en los archivos
+
+    private String orden = "";
+
+    private biblioteca biblioteca = new biblioteca();
 
     /**
      * Constructor para inicializar la interfaz gráfica.
@@ -92,13 +100,15 @@ public class Gui extends JFrame {
             String selectedOption = (String) sortComboBox.getSelectedItem();
             switch (selectedOption) {
                 case "Nombre del archivo":
-                    // Aquí va la lógica para ordenar por nombre
+                    orden = "Name";
                     break;
                 case "Fecha de creación":
-                    // Aquí va la lógica para ordenar por fecha de creación
+                    Sorting.bubbleSortDescending(biblioteca.resultado());
+                    orden = "date";
                     break;
                 case "Tamaño":
-                    // Aquí va la lógica para ordenar por tamaño
+                    Sorting.radixSortByFileSizeDescending(biblioteca.resultado());
+                    orden = "size";
                     break;
             }
         });
@@ -199,6 +209,7 @@ public class Gui extends JFrame {
     private void searchFiles() {
         String searchText = UnicodeHelper.removeAccents(searchTextField.getText().toLowerCase());
         resultsPanel.removeAll();
+        this.biblioteca = new biblioteca();
         List<String> results = tree.searchString(searchText);
         for (String result : results) {
             String[] parts = result.split(": ");
@@ -207,12 +218,38 @@ public class Gui extends JFrame {
             File file = new File(filePath);
             long creationDate = getFileCreationDate(file);
 
-            resultsPanel.add(createResultPanel(file, textSnippet, creationDate, parts[3])); // Pasar la posición de la línea
+
+            this.biblioteca.add(file, textSnippet, creationDate, parts[3]);
+
+        }
+        mostrarpantalla(biblioteca);
+
+    }
+
+
+
+
+    public void mostrarpantalla(biblioteca biblioteca){
+        if(orden.equals("Name")){
+            Sorting.quickSortByFileNameDescending(this.biblioteca.resultado());
+        } else if(orden.equals("date")) {
+            Sorting.bubbleSortDescending(biblioteca.resultado());
+        } else if(orden.equals("size")) {
+            Sorting.radixSortByFileSizeDescending(this.biblioteca.resultado());
         }
 
+        for(Result result : biblioteca.resultado()){
+            resultsPanel.add(createResultPanel((new File(result.getFilePath())), result.textSnippetm, result.creationDate, result.linePosition));
+
+        }
         resultsPanel.revalidate();
         resultsPanel.repaint();
     }
+
+
+
+
+
 
     /**
      * Obtiene la fecha de creación de un archivo.
@@ -441,6 +478,7 @@ public class Gui extends JFrame {
                 }
             }
         }
+        this.biblioteca.delete(file);
         file.delete();
     }
 

@@ -1,0 +1,10 @@
+Welcome to the testing document. This document is designed to test various aspects of text processing including searching for specific words and phrases.
+Here are some sentences to consider:
+
+1. The quick brown fox jumps over the lazy dog.
+2. The QUICK Brown fox jumps over the lazy dog.
+3. The quick brown fox jumps over the LAZY dog. Can you find the quick brown fox?
+4. This is an example of a sentence with an example, an EXAMPLE, and even an exAmple.
+5. Testing, testing, 1, 2, 3. This is only an example! This is yet another example? This, indeed, is an exemplary example.
+
+The quick brown fox is a classic example used in typing tests. How quickly can you spot the quick brown fox in this document? Does the quick brown fox visit often?
