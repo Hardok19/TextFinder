@@ -8,6 +8,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
+        Gui.main(args);
         AVLTree tree = new AVLTree(); // Crear la instancia del árbol AVL
 
         TextFileReader readertxt = new TextFileReader(tree);

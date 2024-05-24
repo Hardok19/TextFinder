@@ -15,6 +15,22 @@
     </properties>
 
     <dependencies>
+
+
+        <!-- Apache POI for DOCX -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>5.2.2</version>
+        </dependency>
+
+        <!-- PDFBox for PDF -->
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>2.0.24</version>
+        </dependency>
+
         <!-- Log4J 2 API -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -48,6 +64,12 @@
             <artifactId>poi-ooxml</artifactId>
             <version>5.2.2</version>
         </dependency>
+    
+      <dependency>
+        <groupId>io.fintrospect</groupId>
+        <artifactId>fintrospect-examples_2.11</artifactId>
+        <version>13.3.0</version>
+      </dependency>
     </dependencies>
 
 

@@ -238,7 +238,7 @@ public class AVLTree {
     /**
      * Construye y devuelve la oración completa alrededor de una ocurrencia de palabra o frase dada,
      * limitando la búsqueda a 20 palabras antes y 20 palabras después. La palabra o frase central
-     * está destacada por tres numerales (###) a cada lado, lo que facilita su identificación en el texto.
+     * está destacada por tres numerales ([]) a cada lado, lo que facilita su identificación en el texto.
      *
      * @param occurrence La ocurrencia inicial desde donde se debe comenzar a construir la oración.
      * @param length La longitud de la frase a destacar, empezando desde la ocurrencia dada.
@@ -264,7 +264,7 @@ public class AVLTree {
             count++;
         }
         // Agregar los numerales y la palabra o frase destacada.
-        sentence.append("###");
+        sentence.append("{[[[");
         if (length == 1){
             sentence.append(" ").append(occurrence.originalWord);
         }else {
@@ -273,7 +273,7 @@ public class AVLTree {
                 occurrence = occurrence.next;
             }
         }
-        sentence.append(" ###");
+        sentence.append("]]]}");
         // Recolectar hasta 20 palabras después o hasta encontrar un punto.
         current = occurrence;  // Continuar desde la última ocurrencia modificada.
         count = 0;
