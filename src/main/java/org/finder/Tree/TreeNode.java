@@ -7,11 +7,11 @@ import java.util.List;
  * Cada nodo mantiene una lista de ocurrencias de la palabra, junto con información sobre su posición y el documento original.
  */
 public class TreeNode {
-    String word; // Palabra normalizada(toda minusculas y sin ningun signo). Cuando se quiera reconstruir el texto se debe usar el originalWord en ocurrences
-    List<Occurrence> occurrences;// Lista de ocurrencias de la palabra en diversos documentos.
-    int height;// Altura del nodo dentro del árbol AVL, usado para mantener el árbol balanceado.
-    TreeNode left;
-    TreeNode right;
+    private String word; // Palabra normalizada(toda minusculas y sin ningun signo). Cuando se quiera reconstruir el texto se debe usar el originalWord en ocurrences
+    private List<Occurrence> occurrences;// Lista de ocurrencias de la palabra en diversos documentos.
+    private int height;// Altura del nodo dentro del árbol AVL, usado para mantener el árbol balanceado.
+    private TreeNode left;
+    private TreeNode right;
 
     /**
      * Constructor para crear un nuevo nodo con una palabra específica.
@@ -35,10 +35,88 @@ public class TreeNode {
      */
     public Occurrence findExactOccurrence(String originalWord) {
         for (Occurrence occurrence : this.occurrences) {
-            if (occurrence.originalWord.equals(originalWord)) {
+            if (occurrence.getOriginalWord().equals(originalWord)) {
                 return occurrence;  // Devuelve la ocurrencia que coincide exactamente con la palabra original ingresada.
             }
         }
         return null;  // No se encontró una ocurrencia exacta.
     }
+    /**
+     * Devuelve la palabra asociada a este objeto.
+     * Este método permite acceder al valor del atributo 'word',
+     * que representa una palabra específica manejada por la instancia de la clase.
+     *
+     * @return la palabra como una cadena de texto.
+     */
+    public String getWord() {
+        return word;
+    }
+
+    /**
+     * Añade una nueva ocurrencia a la lista de ocurrencias del nodo.
+     * @param occurrence la ocurrencia a añadir.
+     */
+    public void addOccurrence(Occurrence occurrence) {
+        this.occurrences.add(occurrence);
+    }
+
+    /**
+     * Devuelve una copia de la lista de ocurrencias del nodo.
+     * Esto evita que la lista original sea modificada externamente.
+     * @return una copia de la lista de ocurrencias.
+     */
+    public List<Occurrence> getOccurrences() {
+        return new ArrayList<>(this.occurrences);
+    }
+    /**
+     * Establece la altura de este nodo.
+     * Este método permite actualizar la altura del nodo, usualmente después de inserciones o eliminaciones.
+     * @param height la nueva altura del nodo.
+     */
+    public void setHeight(int height) {
+        this.height = height;
+    }
+    /**
+     * Retorna la altura de este nodo.
+     * La altura es utilizada comúnmente en estructuras de árboles balanceados como AVL o árboles rojo-negros.
+     * @return la altura del nodo.
+     */
+    public int getHeight() {
+        return height;
+    }
+
+    /**
+     * Retorna el nodo hijo izquierdo de este nodo.
+     * @return el nodo izquierdo.
+     */
+    public TreeNode getLeft() {
+        return left;
+    }
+
+    /**
+     * Establece el nodo hijo izquierdo de este nodo.
+     * @param left el nodo izquierdo a ser establecido.
+     */
+    public void setLeft(TreeNode left) {
+        this.left = left;
+    }
+
+    /**
+     * Retorna el nodo hijo derecho de este nodo.
+     * @return el nodo derecho.
+     */
+    public TreeNode getRight() {
+        return right;
+    }
+
+    /**
+     * Establece el nodo hijo derecho de este nodo.
+     * @param right el nodo derecho a ser establecido.
+     */
+    public void setRight(TreeNode right) {
+        this.right = right;
+    }
+
+
+
 }

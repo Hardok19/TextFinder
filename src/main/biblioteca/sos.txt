@@ -1,0 +1,226 @@
+Instituto Tecnológico de Costa Rica
+Escuela de Ingeniería en Computadores
+Algoritmos y Estructuras de Datos I (CE 1103)
+I Semestre 2024
+Tarea Extra-Clase 2
+“CLEAN CODE”
+Integrantes del Equipo:
+Dylan Elizondo Picado 2023086320
+Harold Madriz Cerdas 2023106162
+Darien Golfín Tencio 2023152232
+Fecha de Entrega:24/4/2024
+
+
+
+
+
+
+
+
+
+
+
+
+1. Nomenclatura
+Código Original:
+
+
+
+
+
+
+Problema:
+-	Las variables port, client y stream podrían tener nombres más descriptivos para clarificar su propósito sin necesidad de comentar o revisar el tipo de datos. 
+
+-	La variable _logger puede tener un nombre más específico relacionado a su uso en la clase.
+
+
+Corrección:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2. Funciones
+Código Original:
+
+
+
+
+
+
+Problema:
+-	La función ProcessData está realizando varias tareas: convierte datos, envía datos, recibe respuesta y maneja errores.
+
+-	La función Down está realizando tanto la generación de JSON como la comunicación de red y el logging, mezclando lógicas que deberían estar separadas.
+
+Corrección: 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+3. Comentarios
+
+Código Original:
+
+
+
+
+             Problema:
+-	Comentario innecesario que describe lo obvio.
+
+-	El comentario es redundante porque el nombre del método getNode ya es bastante descriptivo sobre lo que hace el método.
+
+Corrección: Eliminar el comentario y asegurarse que el nombre de la variable sea descriptivo:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+4. Formato
+Código Original:
+
+
+
+
+
+
+
+
+             Problema:
+-	El manejo de excepciones y los flujos de control están demasiado anidados, lo que puede dificultar la lectura y el mantenimiento del código.
+
+-	El código tiene varios problemas de formato: las líneas están muy juntas, hay un uso inconsistente de espacios y la estructura de bucles no es clara.
+
+Corrección: 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+5. Objetos y estructuras de datos
+Código Original:
+
+
+
+
+
+
+
+
+
+
+             Problema:
+-	La clase expone detalles internos como tail y size que deberían estar encapsulados para prevenir manipulaciones no controladas.
+
+-	La clase ClientSocket gestiona la conexión y también procesa datos, lo que infringe el principio de responsabilidad única.
+
+
+Corrección: 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+6. Manejo de errores
+Código Original:
+
+
+
+
+
+
+
+
+             Problema:
+-	El manejo de excepciones es genérico y no proporciona una forma clara de responder a diferentes tipos de errores.
+
+-	No escribir correctamente las sentencias try-catch-finally.
+
+Corrección: 
+
+

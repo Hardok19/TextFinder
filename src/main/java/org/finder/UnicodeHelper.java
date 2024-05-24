@@ -1,10 +1,22 @@
 package org.finder;
+
+import java.text.Normalizer;
+import java.util.regex.Pattern;
 /**
  * Proporciona métodos utilitarios para convertir entre cadenas de texto y sus correspondientes arreglos de puntos de código Unicode.
  * Esta clase puede ser utilizada para manipular y analizar datos de texto a nivel de punto de código, lo cual es útil
  * en contextos donde se requiere el procesamiento de Unicode.
  */
 public class UnicodeHelper {
+    public static String removeAccents(String text) {
+        if (text == null) {
+            return null;
+        }
+        String nfdNormalizedString = Normalizer.normalize(text, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{M}+");
+        return pattern.matcher(nfdNormalizedString).replaceAll("");
+    }
+
     /**
      * Convierte una cadena dada en un arreglo de puntos de código Unicode.
      * Este método mapea cada carácter de la cadena de entrada a su correspondiente punto de código Unicode.
